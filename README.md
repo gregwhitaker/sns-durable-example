@@ -1,7 +1,7 @@
-sns-example
+sns-durable-example
 ===
 
-This example shows you how to subscribe to messages from an AWS [Simple Notification Service](https://aws.amazon.com/sns/) topic.
+This example shows you how to durably subscribe to messages from an AWS [Simple Notification Service](https://aws.amazon.com/sns/) topic.
 
 ##Running the Example
 The example can be run using the following gradle command:
