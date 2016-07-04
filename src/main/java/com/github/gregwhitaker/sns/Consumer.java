@@ -16,11 +16,18 @@
 
 package com.github.gregwhitaker.sns;
 
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.services.sqs.AmazonSQSClient;
+
 public class Consumer implements Runnable {
     private final String name;
+    private final String queueArn;
+    private final AmazonSQSClient sqsClient;
 
     public Consumer(String name, String queueArn) {
         this.name = name;
+        this.queueArn = queueArn;
+        this.sqsClient = new AmazonSQSClient(new DefaultAWSCredentialsProviderChain());
     }
 
     @Override

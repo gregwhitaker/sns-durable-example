@@ -27,7 +27,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Sends messages to the example sns topic at a set interval.
+ * Sends messages to the example sns topic at a set interval which are then forwarded by AWS to the example SQS queue
+ * for durable storage.
  */
 public class Producer implements Runnable {
     private final String name;
@@ -61,6 +62,7 @@ public class Producer implements Runnable {
 
                     @Override
                     public void onError(Throwable t) {
+                        t.printStackTrace();
                         latch.countDown();
                     }
 
