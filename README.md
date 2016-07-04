@@ -1,6 +1,8 @@
 sns-durable-example
 ===
 
+[![Build Status](https://travis-ci.org/gregwhitaker/sns-durable-example.svg?branch=master)](https://travis-ci.org/gregwhitaker/sns-durable-example)
+
 This example shows you how to durably subscribe to messages from an AWS [Simple Notification Service](https://aws.amazon.com/sns/) topic.
 
 The example creates an SNS topic that is consumed and stored by an SQS queue.  This allows the subscriber to read the events from SNS
