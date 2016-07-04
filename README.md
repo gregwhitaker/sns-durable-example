@@ -3,6 +3,10 @@ sns-durable-example
 
 This example shows you how to durably subscribe to messages from an AWS [Simple Notification Service](https://aws.amazon.com/sns/) topic.
 
+The example creates an SNS topic that is consumed and stored by an SQS queue.  This allows the subscriber to read the events from SNS
+off of the SQS queue where they are durably stored.  The subscriber need not worry about message loss in the case of a disconnect 
+because the SQS queue is storing the notifications.
+
 ##Running the Example
 The example can be run using the following gradle command:
 
