@@ -16,21 +16,9 @@
 
 package com.github.gregwhitaker.sns;
 
-/**
- * Runs the Durable SNS example.
- */
-public class ExampleRunner {
+public class Subscriber {
 
-    /**
-     * Main entry-point for this example.  This starts the producer and subscriber applications.
-     *
-     * @param args command line arguments
-     * @throws Exception
-     */
-    public static void main(String... args) throws Exception {
-        Producer.main();
-        Subscriber.main();
+    public static void main(String... args) {
 
-        Thread.currentThread().join();
     }
 }
