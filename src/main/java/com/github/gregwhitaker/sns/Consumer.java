@@ -18,7 +18,14 @@ package com.github.gregwhitaker.sns;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.sqs.model.Message;
+import com.amazonaws.services.sqs.model.ReceiveMessageResult;
 
+import java.util.List;
+
+/**
+ * Consumes messages from the example SQS queue.  The messages are published to the queue automatically by SNS.
+ */
 public class Consumer implements Runnable {
     private final String name;
     private final String queueArn;
@@ -32,6 +39,28 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
+        String queueName = queueArn.substring(queueArn.lastIndexOf("/"));
+        String queueUrl = sqsClient.getQueueUrl(queueName).getQueueUrl();
 
+        while (true) {
+            ReceiveMessageResult result = sqsClient.receiveMessage(queueUrl);
+
+            List<Message> messages = result.getMessages();
+
+            if (messages != null && !messages.isEmpty()) {
+                for (Message message : messages) {
+                    System.out.println(name + ": " + message.getBody());
+
+                    // Acknowledge the message so that it will not be redelivered
+                    sqsClient.deleteMessage(queueUrl, message.getReceiptHandle());
+                }
+            } else {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
