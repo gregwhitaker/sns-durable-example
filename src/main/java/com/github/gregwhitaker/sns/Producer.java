@@ -47,7 +47,7 @@ public class Producer implements Runnable {
 
         RxReactiveStreams.toPublisher(Observable.interval(1_000, TimeUnit.MILLISECONDS)
                                         .onBackpressureDrop()
-                                        .map(i -> name + ": This is message " + i))
+                                        .map(i -> "This is message " + i))
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onSubscribe(Subscription s) {
@@ -56,6 +56,7 @@ public class Producer implements Runnable {
 
                     @Override
                     public void onNext(String message) {
+                        System.out.println(name + ": " + message);
                         snsClient.publish(topicArn, message, "Durable SNS Topic Example");
                         latch.countDown();
                     }
