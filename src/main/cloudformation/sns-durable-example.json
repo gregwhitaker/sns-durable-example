@@ -9,7 +9,7 @@
       "Properties": {
         "Subscription": [
           {
-            "Endpoint": {"Fn::GetAtt": ["ExampleQueue", "Arn"]},
+            "Endpoint": { "Fn::GetAtt": ["ExampleQueue", "Arn"] },
             "Protocol": "sqs"
           }
         ],
