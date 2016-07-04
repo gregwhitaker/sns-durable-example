@@ -9,7 +9,7 @@ The example creates an SNS topic that is consumed and stored by an SQS queue.  T
 off of the SQS queue where they are durably stored.  The subscriber need not worry about message loss in the case of a disconnect 
 because the SQS queue is storing the notifications.
 
-##Prequisites
+##Prerequisites
 The example requires that you create an SNS topic and an SQS queue in your AWS account using the following CloudFormation template:
 
 * [Example Setup CloudFormation](https://github.com/gregwhitaker/sns-durable-example/blob/master/src/main/cloudformation/sns-durable-example.json)
