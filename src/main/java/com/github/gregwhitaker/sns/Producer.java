@@ -16,6 +16,8 @@
 
 package com.github.gregwhitaker.sns;
 
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.services.sns.AmazonSNSClient;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 import rx.Observable;
@@ -29,9 +31,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class Producer implements Runnable {
     private final String name;
+    private final String topicArn;
+    private final AmazonSNSClient snsClient;
 
-    public Producer(String name) {
+    public Producer(String name, String topicArn) {
         this.name = name;
+        this.topicArn = topicArn;
+        this.snsClient = new AmazonSNSClient(new DefaultAWSCredentialsProviderChain());
     }
 
     @Override
@@ -48,7 +54,8 @@ public class Producer implements Runnable {
                     }
 
                     @Override
-                    public void onNext(String s) {
+                    public void onNext(String message) {
+                        snsClient.publish(topicArn, message, "Durable SNS Topic Example");
                         latch.countDown();
                     }
 
@@ -68,7 +75,5 @@ public class Producer implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        System.exit(0);
     }
 }

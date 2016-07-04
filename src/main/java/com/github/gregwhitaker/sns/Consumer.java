@@ -19,7 +19,7 @@ package com.github.gregwhitaker.sns;
 public class Consumer implements Runnable {
     private final String name;
 
-    public Consumer(String name) {
+    public Consumer(String name, String queueArn) {
         this.name = name;
     }
 

@@ -31,9 +31,17 @@ public class ExampleRunner {
      * @throws Exception
      */
     public static void main(String... args) throws Exception {
+        if (System.getProperty("topicArn") == null) {
+            throw new RuntimeException("The arn of the example topic is required to run this example!");
+        }
+
+        if (System.getProperty("queueArn") == null) {
+            throw new RuntimeException("The arn of the example queue is required to run this example!");
+        }
+
         ExecutorService executor = Executors.newCachedThreadPool();
-        executor.execute(new Producer("Producer1"));
-        executor.execute(new Consumer("Consumer1"));
+        executor.execute(new Producer("Producer1", System.getProperty("topicArn")));
+        executor.execute(new Consumer("Consumer1", System.getProperty("queueArn")));
 
         Thread.currentThread().join();
     }
