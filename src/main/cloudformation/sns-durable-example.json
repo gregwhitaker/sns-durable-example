@@ -1,0 +1,61 @@
+{
+  "Parameters": {
+
+  },
+
+  "Resources": {
+    "ExampleTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "Subscription": [
+          {
+            "Endpoint": {"Fn::GetAtt": ["ExampleQueue", "Arn"]},
+            "Protocol": "sqs"
+          }
+        ],
+        "TopicName": "ExampleTopic"
+      }
+    },
+    "ExampleQueue": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": "ExampleQueue"
+      }
+    },
+    "ExampleQueuePolicy": {
+      "Type": "AWS::SQS::QueuePolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Id": "ExampleQueuePolicy",
+          "Version" : "2012-10-17",
+          "Statement" : [
+            {
+              "Sid" : "Allow-SendMessage",
+              "Effect" : "Allow",
+              "Principal":"*",
+              "Action" : [ "sqs:SendMessage" ],
+              "Resource" : "*",
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": { "Ref":"ExampleTopic" }
+                }
+              }
+            }
+          ]
+        },
+        "Queues": [
+          { "Ref": "ExampleQueue" }
+        ]
+      }
+    }
+  },
+
+  "Outputs": {
+    "ExampleTopicArn": {
+      "Value": { "Ref": "ExampleTopic" }
+    },
+    "ExampleQueueArn": {
+      "Value": { "Ref": "ExampleQueue" }
+    }
+  }
+}
