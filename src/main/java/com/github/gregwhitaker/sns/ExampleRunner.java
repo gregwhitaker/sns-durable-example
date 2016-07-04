@@ -16,20 +16,24 @@
 
 package com.github.gregwhitaker.sns;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
- * Runs the Durable SNS example.
+ * Runs the Durable SNS subscription example.
  */
 public class ExampleRunner {
 
     /**
-     * Main entry-point for this example.  This starts the producer and subscriber applications.
+     * Main entry-point for this example.  This starts the producer and consumer applications.
      *
      * @param args command line arguments
      * @throws Exception
      */
     public static void main(String... args) throws Exception {
-        Producer.main();
-        Subscriber.main();
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.execute(new Producer("Producer1"));
+        executor.execute(new Consumer("Consumer1"));
 
         Thread.currentThread().join();
     }

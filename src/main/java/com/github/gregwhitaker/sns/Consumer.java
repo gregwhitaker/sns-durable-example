@@ -16,9 +16,15 @@
 
 package com.github.gregwhitaker.sns;
 
-public class Subscriber {
+public class Consumer implements Runnable {
+    private final String name;
 
-    public static void main(String... args) {
+    public Consumer(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void run() {
 
     }
 }

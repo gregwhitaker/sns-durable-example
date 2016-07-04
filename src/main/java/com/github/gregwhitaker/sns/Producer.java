@@ -16,9 +16,59 @@
 
 package com.github.gregwhitaker.sns;
 
-public class Producer {
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+import rx.Observable;
+import rx.RxReactiveStreams;
 
-    public static void main(String ... args) {
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
+/**
+ * Sends messages to the example sns topic at a set interval.
+ */
+public class Producer implements Runnable {
+    private final String name;
+
+    public Producer(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void run() {
+        final CountDownLatch latch = new CountDownLatch(Integer.MAX_VALUE);
+
+        RxReactiveStreams.toPublisher(Observable.interval(1_000, TimeUnit.MILLISECONDS)
+                                        .onBackpressureDrop()
+                                        .map(i -> name + ": This is message " + i))
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        s.request(Integer.MAX_VALUE);
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        latch.countDown();
+                    }
+                });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.exit(0);
     }
 }
