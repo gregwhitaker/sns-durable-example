@@ -17,10 +17,14 @@
 package com.github.gregwhitaker.sns;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -31,15 +35,18 @@ public class Consumer implements Runnable {
     private final String queueArn;
     private final AmazonSQSClient sqsClient;
 
+    private final ObjectMapper mapper = new ObjectMapper();
+
     public Consumer(String name, String queueArn) {
         this.name = name;
         this.queueArn = queueArn;
         this.sqsClient = new AmazonSQSClient(new DefaultAWSCredentialsProviderChain());
+        this.sqsClient.setRegion(Region.getRegion(Regions.US_WEST_2));
     }
 
     @Override
     public void run() {
-        String queueName = queueArn.substring(queueArn.lastIndexOf("/"));
+        String queueName = queueArn.substring(queueArn.lastIndexOf(":") + 1);
         String queueUrl = sqsClient.getQueueUrl(queueName).getQueueUrl();
 
         while (true) {
@@ -49,10 +56,15 @@ public class Consumer implements Runnable {
 
             if (messages != null && !messages.isEmpty()) {
                 for (Message message : messages) {
-                    System.out.println(name + ": " + message.getBody());
-
-                    // Acknowledge the message so that it will not be redelivered
-                    sqsClient.deleteMessage(queueUrl, message.getReceiptHandle());
+                    try {
+                        SnsMessage parsedMessage = mapper.readerFor(SnsMessage.class).readValue(message.getBody());
+                        System.out.println(name + ": " + parsedMessage.getMessage());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        // Acknowledge the message so that it will not be redelivered
+                        sqsClient.deleteMessage(queueUrl, message.getReceiptHandle());
+                    }
                 }
             } else {
                 try {

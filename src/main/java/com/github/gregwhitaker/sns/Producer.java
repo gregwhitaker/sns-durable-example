@@ -17,6 +17,8 @@
 package com.github.gregwhitaker.sns;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -39,6 +41,7 @@ public class Producer implements Runnable {
         this.name = name;
         this.topicArn = topicArn;
         this.snsClient = new AmazonSNSClient(new DefaultAWSCredentialsProviderChain());
+        this.snsClient.setRegion(Region.getRegion(Regions.US_WEST_2));
     }
 
     @Override

@@ -11,8 +11,13 @@ repositories {
 dependencies {
     compile('com.amazonaws:aws-java-sdk-sns:1.11.13')
     compile('io.reactivex:rxjava-reactive-streams:1.0.1')
+    compile('com.fasterxml.jackson.core:jackson-databind:2.7.5')
 
     testCompile 'junit:junit:4.11'
 }
 
 mainClassName = "com.github.gregwhitaker.sns.ExampleRunner"
+
+run {
+    args = ["${project.topicArn}", "${project.queueArn}"]
+}
