@@ -11,7 +11,7 @@ because the SQS queue is storing the notifications.
 The example can be run using the following gradle command:
 
 ```
-$ ./gradlew run
+$ ./gradlew run -DtopicArn={sns topic arn} -DqueueArn={sqs queue arn}
 ```
 
 ##License
