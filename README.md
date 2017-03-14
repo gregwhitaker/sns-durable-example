@@ -1,6 +1,4 @@
-sns-durable-example
-===
-
+# sns-durable-example
 [![Build Status](https://travis-ci.org/gregwhitaker/sns-durable-example.svg?branch=master)](https://travis-ci.org/gregwhitaker/sns-durable-example)
 
 This example shows you how to durably subscribe to messages from an AWS [Simple Notification Service](https://aws.amazon.com/sns/) topic.
@@ -9,12 +7,12 @@ The example creates an SNS topic that is consumed and stored by an SQS queue.  T
 off of the SQS queue where they are durably stored.  The subscriber need not worry about message loss in the case of a disconnect 
 because the SQS queue is storing the notifications.
 
-##Prerequisites
+## Prerequisites
 The example requires that you create an SNS topic and an SQS queue in your AWS account using the following CloudFormation template:
 
 * [Example Setup CloudFormation](https://github.com/gregwhitaker/sns-durable-example/blob/master/src/main/cloudformation/sns-durable-example.json)
 
-##Running the Example
+## Running the Example
 The example can be run using the following gradle command:
 
 ```
@@ -23,7 +21,7 @@ $ ./gradlew run -DtopicArn={sns topic arn} -DqueueArn={sqs queue arn}
 
 **NOTE:** The example is using the `DefaultAWSCredentialsProvider` so you can supply your AWS credentials using the `.aws/credentials` file, as system properties, or as environment variables.
 
-##License
+## License
 Copyright 2016 Greg Whitaker
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
